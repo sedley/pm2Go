@@ -1,6 +1,6 @@
 # AQI status webservice
 
-This service displayed the current AQI for the Redwood City area in a 500px by 500px png at `/image.png`, a json payload is
+This service displays the current AQI for the Redwood City area in a 500px by 500px png at `/image.png`, a json payload is
 also available at `/aqi`.
 
 ## Deployment
