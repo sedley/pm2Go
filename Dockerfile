@@ -6,6 +6,10 @@ FROM golang:1.15-buster as builder
 # Create and change to the app directory.
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y libmagickwand-dev
+
+RUN ldconfig /usr/local/lib
+
 # Retrieve application dependencies.
 # This allows the container build to reuse cached dependencies.
 # Expecting to copy go.mod and if present go.sum.
@@ -23,7 +27,7 @@ RUN go build -mod=readonly -v -o server
 # https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
 FROM debian:buster-slim
 RUN set -x && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    ca-certificates && \
+    ca-certificates libmagickwand-dev && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy the binary to the production image from the builder stage.
