@@ -13,8 +13,9 @@ import (
 )
 
 type AQIResp struct {
-	AQI  int
-	Desc string
+	AQI   int
+	Desc  string
+	Color string
 }
 
 type NoPrimaryDataSourceError struct{}
@@ -194,11 +195,11 @@ func handleData(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatalf("failed to get aqi %q", err)
 	}
-	aqiDescription, _ := GetAqiColorDesc(aqi)
+	colorCode, aqiDescription := GetAqiColorDesc(aqi)
 	for _, header := range responseHeaders {
 		w.Header().Set(header.Name, header.Value)
 	}
-	resp := AQIResp{AQI: aqi, Desc: aqiDescription}
+	resp := AQIResp{AQI: aqi, Desc: aqiDescription, Color: colorCode}
 	err = json.NewEncoder(w).Encode(resp)
 	if err != nil {
 		errorString := []byte(err.Error())
